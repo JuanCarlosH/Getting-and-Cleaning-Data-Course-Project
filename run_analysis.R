@@ -179,7 +179,7 @@ for(i in 1:subjectLen) {
 head(result)
 
 # write out the 2nd dataset
-write.table(result, "data_with_means.txt") 
+write.table(result, "data_with_average_each_variable.txt") 
 
 
 
