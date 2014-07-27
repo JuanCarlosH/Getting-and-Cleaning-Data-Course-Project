@@ -1,5 +1,5 @@
 #==============================================================================#
-#---------------------------- AMBIENTE R --------------------------------------#
+#---------------------------- Environment R -----------------------------------#
 #==============================================================================#
 
 options(prompt = "[] ", continue = "..  ", width = 70,
@@ -26,10 +26,10 @@ library(gtools)
 memory.limit(size = 3000)
 
 #==============================================================================#
-#-------------------------- LUGAR DE TRABAJO ----------------------------------#
+#------------------------------ Work Space ------------------------------------#
 #==============================================================================#
 
-setwd("C:/Users/DaisyVM/Desktop/Project Course") #
+setwd("C:/Users/JCHO/Desktop/Project Course") #
 getwd()
 dir()
 
@@ -65,7 +65,7 @@ head(trainSubject)
 
 testData <- read.table("./UCI HAR Dataset/test/X_test.txt")
 dim(testData) 
-# 2947*561
+#[1] 2947 561
 
 testLabel <- read.table("./UCI HAR Dataset/test/y_test.txt") 
 table(testLabel) 
@@ -77,15 +77,15 @@ testSubject <- read.table("./UCI HAR Dataset/test/subject_test.txt")
 
 joinData <- rbind(trainData, testData)
 dim(joinData) 
-# 10299*561
+#[1] 10299 561
 
 joinLabel <- rbind(trainLabel, testLabel)
 dim(joinLabel) 
-# 10299*1
+#[1] 10299 1
 
 joinSubject <- rbind(trainSubject, testSubject)
 dim(joinSubject) 
-# 10299*1
+#[1] 10299 1
 
 #==============================================================================#
 # Step2. Extracts only the measurements on the mean and standard 
@@ -93,15 +93,15 @@ dim(joinSubject)
 
 features <- read.table("./UCI HAR Dataset/features.txt")
 dim(features)
-# 561 2
+#[1] 561 2
 
 meanStdIndices <- grep("mean\\(\\)|std\\(\\)", features[, 2])
 length(meanStdIndices) 
-# 66
+#[1] 66
 
 joinData <- joinData[, meanStdIndices]
 dim(joinData) 
-# 10299*66
+#[1] 10299 66
 
 names(joinData) <- gsub("\\(\\)", "", features[meanStdIndices, 2]) 
 # remove "()"
@@ -139,7 +139,7 @@ names(joinSubject) <- "subject"
 
 cleanedData <- cbind(joinSubject, joinLabel, joinData)
 dim(cleanedData) 
-# 10299*68
+#[1] 10299 68
 
 write.table(cleanedData, "merged_data.txt") # write out the 1st dataset
 
@@ -147,10 +147,10 @@ write.table(cleanedData, "merged_data.txt") # write out the 1st dataset
 # Step5. Creates a second, independent tidy data set with the average of 
 # each variable for each activity and each subject. 
 subjectLen <- length(table(joinSubject)) 
-# 30
+#[1] 30
 
 activityLen <- dim(activity)[1] 
-# 6
+#[1] 6
 
 columnLen <- dim(cleanedData)[2]
 
@@ -179,6 +179,18 @@ write.table(result, "data_with_means.txt")
 data <- read.table("./data_with_average_each_variable.txt")
 data[1:12, 1:3]
 
+#[] data[1:12, 1:3]
+#   subject          activity tBodyAccMeanX
+#1        1           walking     0.2773308
+#2        1   walkingUpstairs     0.2554617
+#3        1 walkingDownstairs     0.2891883
+#4        1           sitting     0.2612376
+#5        1          standing     0.2789176
+#6        1            laying     0.2215982
+#7        2           walking     0.2764266
+#8        2   walkingUpstairs     0.2471648
+#9        2 walkingDownstairs     0.2776153
+#10       2           sitting     0.2770874
+#11       2          standing     0.2779115
+#12       2            laying     0.2813734
 
-data1 <- ddply(cleanedData, c("subject", "activity"), summarise,
-               mean=rowMeans(cleanedData[, 3:68]))
