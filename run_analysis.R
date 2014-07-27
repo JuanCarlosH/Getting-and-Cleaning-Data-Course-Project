@@ -31,7 +31,14 @@ memory.limit(size = 3000)
 
 setwd("C:/Users/JCHO/Desktop/Project Course") #
 getwd()
+#[1] "C:/Users/JCHO/Desktop/Project Course"
+
 dir()
+#[] dir()
+#[1] "getdata-projectfiles-UCI HAR Dataset.zip"
+#[2] "link.txt"                               
+#[3] "run_analysis.R"                            
+#[4] "UCI HAR Dataset"                         
 
 
 #==============================================================================#
